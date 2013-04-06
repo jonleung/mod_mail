@@ -1,0 +1,1 @@
+echo "h" | convert -trim -antialias  -fill '#000000' -font ./fonts/HelveticaNeueLTPro-Lt.otf -pointsize 15 -size 21x -weight 300 -kerning 0 caption:@- -gravity south -splice 0x10  -background '#8bba3e00'  ./public/system/titles/h.png

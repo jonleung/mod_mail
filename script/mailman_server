@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "bundler/setup"
+require "mailman"
+require "colorize"
+require "debugger"
+
+Mailman.config.logger = Logger.new("log/mailman.log")
+
+Mailman.config.pop3 = {
+  :username => 'andrearobertstein@gmail.com',
+  :password => 'peanut1337',
+  :server   => 'pop.gmail.com',
+  :port     => 995,
+  :ssl      => true
+}
+
+puts "Hello World!"
