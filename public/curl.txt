@@ -1,1 +1,0 @@
-curl -F to=naruto137@gmail.com -F from=hello@modmail.cc -F html=HelloWorld -F api_user=modmail -F api_key=ayakasayslessismore -F subject=Hello1 https://sendgrid.com/api/mail.send.json
