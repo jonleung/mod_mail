@@ -10,25 +10,31 @@ class Emailer < ActionMailer::Base
   def sample_send(params)
     mail params do |format|
       format.html { render :text => params[:html_body] }
-    end
+    endsebd
   end
 =end
 
+
   def send_email(params)
-    Analytics.no_gmail
-    
     mail params do |format|
-      format.html { render :html => params[:html_body] }
+      format.html { render :html => params[:body] }
     end
+  end
+
+  def send_image_encoded_email(params)
+    mail params do |format|
+      format.html { render :text => params[:image_encoded_html_body] }
+      format.text { render :text => "                 " }
+    end
+    return
   end
 
   def send_confirmation_email(params)
     Analytics.send_confirmation
-    @emails = params[:to_emails_array].join(", ")
-    @original_text_body = params[:text_body]
+    @emails = params[:to].join(", ")
+    @original_text_body = params[:original_text_body]
     @dirty_bit_url = "/email/#{params[:email_id]}/is_read_image"
-    @update_form_url = "/email/#{params[:email_id]}/update?security_token=#{params[:security_token]}"
-    # TODO
+    @update_form_url = "/email/#{params[:email_id]}/rewrite?security_token=#{params[:security_key]}"
   end
 
   def send_error_email(params)
@@ -37,17 +43,21 @@ class Emailer < ActionMailer::Base
     #TODO, log different types of errors and send us a text message!
   end
 
-  def send_not_registered_email(params)
+  def send_not_registered_email(params={})
     Analytics.send_not_registered
-    @registration_url = "/"
+    @registration_url = ENV['base_url']
     #TODO
   end
 
-  def send_image_encoded_html(params)
-    @image_encoded_html_body = params[:image_encoded_html_body]
-    mail params do |format|
-      format.html { render :html => params[:html] }
-    end
-  end
+
+
+
+
+
+
+
+
+
+
 
 end

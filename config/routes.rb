@@ -10,6 +10,7 @@ ModMail::Application.routes.draw do
   match '/p' => 'image_playground#playground'
   match '/d' => 'image_playground#debug'
   match '/external_ip_test' =>  'external_ip#test'
+  match '/w' => 'testing#work'
 
   # Authentication
   match '/authenticate' => redirect('/auth/google_oauth2')

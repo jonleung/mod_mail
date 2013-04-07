@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module EmailHelper
 
   #Syntax: Email addresses seperated by newlines
@@ -6,7 +8,7 @@ module EmailHelper
     email_regex = /.+@.+\..+/
     to = []
     text = ""
-    emails = body.split("\n\n")[0]
+    emails = body.split(/\n\n/)[0]
     emails.split("\n").each do |line|
       if line[email_regex]
         to << line
@@ -18,7 +20,7 @@ module EmailHelper
     else
       text = body.split("\n\n")[1..-1].join("\n\n")
     end
-    return { :to => to, :text => text }
+    return { :to => to, :body => text }
   end
 
 end

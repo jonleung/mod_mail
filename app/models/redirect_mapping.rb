@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class RedirectMapping
   
   def self.r
@@ -13,11 +15,11 @@ class RedirectMapping
   end
 
   def char
-    return RedirectMapping.r[image_tag_uri].get
+    return self.class.r[image_tag_uri].get
   end
 
   def char=(value)
-    RedirectMapping.r[image_tag_uri].set(value)
+    self.class.r[image_tag_uri].set(value)
   end
 
   def initialize(char, uri=nil)
@@ -43,7 +45,7 @@ class RedirectMapping
   end
 
   def self.find_image_url_by_image_tag_uri(uri)
-    char = self.r[uri].get
+    char = r[uri].get
     img_map = HostedCharImage.new(char)
     img_map.hosted_image_url
   end
