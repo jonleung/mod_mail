@@ -45,9 +45,9 @@ class Email
     raise "body is too long" if self.original_text_body.length > Email.max_chars
 
     self.original_text_body.split("").each do |char|
+      debugger
       self.redirect_mappings << RedirectMapping.new(char)
     end
-    debugger
     (Email.max_chars - self.original_text_body.length).times.each do
       self.redirect_mappings << RedirectMapping.new("")
     end
@@ -106,6 +106,41 @@ class Email
   end
 
 
+end
 
+class RedirectMapping
+
+  def mongoize
+    Marshal.dump(self)
+  end
+
+  class << self
+
+    def demongoize(object)
+      debugger
+      Marshal.load(object)
+    end
+
+    def mongoize(object)
+      debugger
+      case object
+      when RedirectMapping
+        object.mongoize
+      else 
+        object
+      end
+    end
+
+    def evolve(object)
+      debugger
+      case object
+      when RedirectMapping
+        object.mongoize
+      else 
+        object
+      end
+    end
+
+  end
 
 end

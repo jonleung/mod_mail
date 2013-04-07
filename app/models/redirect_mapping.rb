@@ -15,11 +15,11 @@ class RedirectMapping
   end
 
   def char
-    return RedirectMapping.r[image_tag_uri].get
+    return self.class.r[image_tag_uri].get
   end
 
   def char=(value)
-    RedirectMapping.r[image_tag_uri].set(value)
+    self.class.r[image_tag_uri].set(value)
   end
 
   def initialize(char)
@@ -31,17 +31,17 @@ class RedirectMapping
   def generate_image_tag_uri
       begin
         random_token = SecureRandom.urlsafe_base64
-        return random_token unless @r[random_token].get.present?
+        return random_token unless self.class.r[random_token].get.present?
       end
   end
 
   def self.find_by_image_tag_uri(uri)
-    char = self.r[uri].get
+    char = r[uri].get
     return RedirectMapping.new(char)
   end
 
   def self.find_image_url_by_image_tag_uri(uri)
-    char = self.r[uri].get
+    char = r[uri].get
     img_map = HostedCharImage.new(char)
     img_map.hosted_image_url
   end
