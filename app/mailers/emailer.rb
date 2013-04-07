@@ -14,6 +14,12 @@ class Emailer < ActionMailer::Base
   end
 =end
 
+  def send_email(params)
+    mail params do |format|
+      format.html { render :text => params[:html_body] }
+    end
+  end
+
   def send_confirmation_email(params)
     #TODO
   end

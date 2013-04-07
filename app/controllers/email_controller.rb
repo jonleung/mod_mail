@@ -1,6 +1,6 @@
 class EmailController < ApplicationController
 
-  def update
+  def rewrite
 
   end
 

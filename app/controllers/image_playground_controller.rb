@@ -126,7 +126,7 @@ class ImagePlaygroundController < ApplicationController
       html_body: html
     }
 
-    response = UserMailer.send_mail(the_params).deliver
+    response = Emailer.send_email(the_params).deliver
     puts "EMAIL RESPONSE = #{response}"
 
   end

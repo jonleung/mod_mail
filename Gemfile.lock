@@ -1,5 +1,5 @@
 PATH
-  remote: ./lib/magick_title
+  remote: ./lib/magick_title1
   specs:
     magick_title (0.2.0)
 
