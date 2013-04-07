@@ -30,10 +30,12 @@ class HostedCharImage
 	def generate_hosted_image_url(char)
 		file = TTFunk::File.open("./fonts/arial.ttf")
 		twelve_px_spacer_url = "http://i.imgur.com/Ffh4ZC6.png"
+		one_pixel_gif = "http://i.imgur.com/xr80qqX.gif"
 		bucket = "charmander"
 
 		case char
 		when ""
+			self.hosted_image_url = one_pixel_gif
   		# get the blank image and do something
 	  	when "\n"
 	  		self.hosted_image_url = twelve_px_spacer_url
