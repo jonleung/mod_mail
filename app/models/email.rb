@@ -4,9 +4,12 @@ class Email
   include Mongoid::Timestamps
   include Mongoid::Paranoia
 
+  belongs_to :user
+
+  field :reply_to, type: String
   field :to, type: Array
   field :subject, type: String
-  
+
   field :original_text_body, type: String
   field :original_html_body, type: String
 
