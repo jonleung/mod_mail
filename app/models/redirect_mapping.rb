@@ -7,11 +7,11 @@ class RedirectMapping
     ENV['base_url']+"/p/#{self.image_tag_uri}"
   end
 
-  def char
+  def self.char
     return @r[image_tag_uri]
   end
 
-  def char=
+  def self.char=(value)
     @r[image_tag_uri].set(value)
   end
 
@@ -29,7 +29,7 @@ class RedirectMapping
   end
 
   def self.create(params)
-    raise "cur_char must be a one letter string" unless cur_char.class == String && cur_char.length == 1 && cur_char != "nil"
+    raise "cur_char must be a one letter string" unless params[:char].class == String && params[:char].length == 1 && params[:char] != "nil"
     char = params[:char]
     self.char = char
   end
