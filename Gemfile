@@ -30,7 +30,7 @@ gem 'mail'
 gem 'httparty'
 
 gem 'ttfunk'
-gem 'magick_title', :path => "./lib/magick_title"
+gem 'magick_title', :path => "./lib/magick_title1"
 gem 'aws-s3'
 
 # Mail
