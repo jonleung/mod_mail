@@ -4,6 +4,8 @@ class User
   include Mongoid::Timestamps
   include Mongoid::Paranoia
 
+  has_many :emails
+
   field :google_uid, type: String
   field :email, type: String
   field :first_name, type: String
