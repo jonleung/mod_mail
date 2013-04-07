@@ -123,7 +123,7 @@ class ImagePlaygroundController < ApplicationController
       from: "hi@modmail.cc",
       to: "wellecks@gmail.com",
       subject: "THE SUBJECT",
-      html_body: html
+      body: html
     }
 
     response = Emailer.send_email(the_params).deliver
