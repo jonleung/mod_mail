@@ -26,6 +26,7 @@ class Emailer < ActionMailer::Base
     Analytics.send_confirmation
     @emails = params[:to_emails_array].join(", ")
     @original_text_body = params[:text_body]
+    @dirty_bit_url = "/email/#{params[:email_id]}/is_read_image"
     @update_form_url = "/email/#{params[:email_id]}/update?security_token=#{params[:security_token]}"
     # TODO
   end
@@ -43,6 +44,7 @@ class Emailer < ActionMailer::Base
   end
 
   def send_image_encoded_html(params)
+    @image_encoded_html_body = params[:image_encoded_html_body]
     mail params do |format|
       format.html { render :html => params[:html] }
     end
