@@ -47,7 +47,7 @@ class HostedCharImage
 	  			image = MagickTitle.say(char, color: "#000000")
 	  		else
 	  			descent_height = (file.descent/1000.0*MagickTitle.options[:font_size]).abs
-	  			image = MagickTitle.say(char, color: "#000000", bottom_padding: descent_height)
+	  			image = MagickTitle.say(char, color: "#000000", bottom_padding: 3)
 	  		end
 	  		add_img_to_s3(image, bucket) unless @r[char].get.present?
   		end

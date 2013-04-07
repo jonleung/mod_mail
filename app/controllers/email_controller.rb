@@ -1,14 +1,10 @@
 class EmailController < ApplicationController
 
   def rewrite
-    email = Email.find(params[:id])
-    if email.security_key != params[:security_key]
-      render :text => "Oh no, you're trying to hack us : ("
-      return
-    end
-
-    if email.rewrite(params[:body])
-      render :text => "Ok! You're email is all set!\n"
+    email = Email.find(params[:email_id])
+    if email.rewrite(params[:edited_message])
+      email.send_confirmation.deliver
+      render :text => email.original_text_body
       return
     else
       render :text => "Oh no! Something went wrong!"
@@ -17,12 +13,7 @@ class EmailController < ApplicationController
   end
 
   def is_read_image
-    email = Email.find(params[:id])
-    if email.security_key != params[:security_key]
-      render :text => "Oh no, you're trying to hack us : ("
-      return
-    end
-
+    email = Email.find(params[:email_id])
     if email.is_read?
       redirect_to "http://i.imgur.com/cp3KrvI.png"
     else

@@ -21,8 +21,8 @@ class TestingController < ApplicationController
     params[:html] = "<h1>Hello World!</h1>"
 
     params[:from] = params[:from][/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/]
-    params[:text] = params[:text].force_encoding("ISO-8859-1").encode("UTF-8")
-    params[:html] = params[:html].force_encoding("ISO-8859-1").encode("UTF-8")
+    # params[:text] = params[:text].force_encoding("ISO-8859-1").encode("UTF-8")
+    # params[:html] = params[:html].force_encoding("ISO-8859-1").encode("UTF-8")
     params[:subject] = params[:subject] + " #{Time.now.to_i}"
 
     unless params[:from][/@gmail.com/]

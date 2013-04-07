@@ -1,8 +1,12 @@
 ModMail::Application.routes.draw do
 
+  root to: "static#index"
+  match '/welcome' => 'static#welcome'
+  match '/confirmation' => 'static#confirmation'
+
   # Email
   get '/email/:email_id/is_read_image' => 'email#is_read_image'
-  post '/email/:email_id/rewrite' => 'email#update'
+  match '/email/:email_id/rewrite' => 'email#rewrite'
   get '/p/:image_tag_uri' => 'redirect_mapping#get'
   get '/dbit/:key' => 'dirty_bit#get'
 

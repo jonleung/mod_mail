@@ -25,14 +25,30 @@ class Email
     200
   end
 
+  before_create :before_create_callback
+  def before_create_callback
+    self.generate_security_key
+    true
+  end
+
   before_save :before_save_callback
   def before_save_callback
     self.generate_dirty_bit
     self.generate_redirect_mapping_array
-    self.generate_security_key
     self.generate_html_encoded_html_body
     # Use Email.parse_email_body and store things properly
+    true
   end
+
+  # after_initialize :chomping
+  # def chomping
+  #   if self.to.class == Array
+  #     self.to.map! { |email| email.chomp! }
+  #   else
+  #     self.to.chomp!
+  #   end
+  # end
+
 
   def generate_dirty_bit
     dirty_bit = DirtyBit.new
@@ -65,23 +81,36 @@ class Email
   end
 
   def is_read?
-    dirty_bit = DirtyBit.find_by_key(self.dirty_bit_key)
-    dirty_bit.is_dirty?
+    DirtyBit.find_by_key(self.dirty_bit_key)
   end
 
   def rewrite(new_plain_text_body)
+    self.image_encoded_html_body = ""
+    self.original_text_body = ""
+
+    i = 0
     char_array = new_plain_text_body.split("")
-    redirect_mapping_uris.zip(char_array).each do |uri, char|
+    redirect_mapping_uris.zip(char_array) do |uri, char|
       rmap = RedirectMapping.find_by_image_tag_uri(uri)
       rmap.char = char
+
+      img_tag = HtmlHelper.build_and_wrap_image(rmap.url)
+      # debugger if i == 0 || i == 1
+      self.image_encoded_html_body << img_tag
+      self.original_text_body << char
+      i += 1
     end
+
+    self.image_encoded_html_body = HtmlHelper.wrap_all_image_tags(self.image_encoded_html_body)
+    self.save
   end
+
 
 
   def send_image_encoded_email
     Emailer.send_image_encoded_email({
       from: user.email,
-      to: user.email,
+      to: self.to,
       subject: self.subject,
       body: self.image_encoded_html_body,
       image_encoded_html_body: self.image_encoded_html_body
@@ -91,7 +120,8 @@ class Email
   def send_confirmation
     Emailer.send_confirmation_email({
       from: user.email,
-      to: self.to,
+      to: user.email,
+      mod_mail_rec: self.to.to_s,
       subject: self.subject,
       original_text_body: self.original_text_body,
       email_id: self.id.to_s,

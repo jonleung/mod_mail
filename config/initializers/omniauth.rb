@@ -4,8 +4,8 @@ OmniAuth.config.on_failure = Proc.new do |env|
   "GmailController".constantize.action(:omniauth_failure_callback).call(env)
 end
 
-ENV['GOOGLE_KEY'] = "437562178340.apps.googleusercontent.com"
-ENV['GOOGLE_SECRET'] = "KCYeiLoRVTQe5pYLO_HR4j_F"
+ENV['GOOGLE_KEY'] = "306831549813-3bjr78a7u8fgld0pkc56t7pr77c3i487.apps.googleusercontent.com"
+ENV['GOOGLE_SECRET'] = "5GT8Fcd-zXNhBTa3TKEKliIg"
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], {
