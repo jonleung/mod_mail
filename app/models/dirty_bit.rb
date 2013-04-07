@@ -1,4 +1,7 @@
 class DirtyBit
+
+	attr_reader :key
+
 	def self.r
 		@@r ||= Nest.new(self.class.to_s.underscore)
 	end

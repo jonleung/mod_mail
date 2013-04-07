@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class RedirectMapping
   
   def self.r
@@ -23,7 +25,7 @@ class RedirectMapping
   def initialize(char)
     @r = RedirectMapping.r
     @image_tag_uri = self.generate_image_tag_uri
-    raise "cur_char must be a one letter string or the empty string" unless char.class == String && char.length > 1
+    raise "cur_char must be a one letter string or the empty string" unless char.class == String && char.length <= 1
     self.char = char
   end
 

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class HostedCharImage
 
 	def self.r

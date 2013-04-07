@@ -6,8 +6,8 @@ class Email
 
   belongs_to :user
 
+  field :from, type: String
   field :reply_to, type: String
-  field :from
   field :to, type: Array
   field :subject, type: String
 
@@ -21,10 +21,10 @@ class Email
   field :dirty_bit_key, type: String
 
   def self.max_chars
-    9001
+    1001
   end
 
-  before_save :before_save
+  before_save :before_save_callback
   def before_save_callback
     self.generate_dirty_bit
     self.generate_redirect_mapping_array
@@ -35,20 +35,21 @@ class Email
 
   def generate_html_encoded_html_body
     img_tags_html = redirect_mappings.each.map {|redirect_mapping| HtmlHelper.build_and_wrap_image(redirect_mapping.url) }
-    wrapped_img_tags_html = HtmlHelper.wrap_all_image_tags
+    wrapped_img_tags_html = HtmlHelper.wrap_all_image_tags(img_tags_html)
     self.image_encoded_html_body = wrapped_img_tags_html
   end
 
   def generate_redirect_mapping_array
     self.redirect_mappings = []
 
-    raise "body is too long" if self.new_plain_text_body.length > Email.max_chars
+    raise "body is too long" if self.original_text_body.length > Email.max_chars
 
-    self.original_plain_text_body.split("").each do |char|
+    self.original_text_body.split("").each do |char|
       self.redirect_mappings << RedirectMapping.new(char)
     end
-    (Email.max_chars - self.original_plain_text_body.length).times do
-      self.redirect_mapping << RedirectMapping.new("")
+    debugger
+    (Email.max_chars - self.original_text_body.length).times.each do
+      self.redirect_mappings << RedirectMapping.new("")
     end
   end
 
@@ -62,8 +63,8 @@ class Email
     dirty_bit.is_dirty?
   end
 
-  def rewrite(new_plain_text_body)
-    char_array = new_plain_text_body.split("")
+  def rewrite(new_text_body)
+    char_array = new_text_body.split("")
     redirect_mappings.zip(char_array).each do |redirect_mapping, char|
       redirect_mapping.char = char
     end
@@ -73,7 +74,7 @@ class Email
     {
       from: user.email,
       to: self.to,
-      subject: self.subject
+      subject: self.subject,
       body: image_encoded_html_body
     }
   end
@@ -82,7 +83,7 @@ class Email
     {
       from: user.email,
       to: user.email,
-      subject: self.subject
+      subject: self.subject,
       body: "Confirmed, your email has been sent!"
     }
   end
@@ -93,7 +94,7 @@ class Email
   end
 
   def deliver_confirmation
-
+    Emailer.send_confirmation_email(self.deliver_email_params)
   end
 
   def generate_security_key

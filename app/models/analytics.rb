@@ -20,5 +20,9 @@ module Analytics
     r.incr("no_gmail")
   end
 
+  def self.email_worker_completed
+    r.incr("email_worker_completed")
+  end
+
 
 end

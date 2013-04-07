@@ -18,30 +18,37 @@ class Emailer < ActionMailer::Base
     Analytics.no_gmail
     
     mail params do |format|
-      format.html { render :html => params[:html_body] }
+      format.html { render :html => params[:html] }
     end
   end
 
   def send_confirmation_email(params)
     Analytics.send_confirmation
-    #TODO
+
+    mail params do |format|
+      format.html { render :html => params[:html] }
+    end
   end
 
   def send_error_email(params)
     Analytics.email_error
     #TODO, log different types of errors and send us a text message!
 
-    #TODO
+    mail params do |format|
+      format.html { render :html => params[:html] }
+    end
   end
 
   def send_not_registered_email(params)
     Analytics.send_not_registered
-    #TODO
+    mail params do |format|
+      format.html { render :html => params[:body] }
+    end
   end
 
   def send_image_encoded_html(params)
     mail params do |format|
-      format.html { render :html => params[:html] }
+      format.html { render :html => params[:body] }
     end
   end
 
