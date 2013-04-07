@@ -11,6 +11,7 @@ ModMail::Application.routes.draw do
   match '/d' => 'image_playground#debug'
   match '/external_ip_test' =>  'external_ip#test'
   match '/w' => 'testing#work'
+  match '/s' => 'testing#send_email'
 
   # Authentication
   match '/authenticate' => redirect('/auth/google_oauth2')

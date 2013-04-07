@@ -30,6 +30,7 @@ class Emailer < ActionMailer::Base
   end
 
   def send_confirmation_email(params)
+    mail params
     Analytics.send_confirmation
     @emails = params[:to].join(", ")
     @original_text_body = params[:original_text_body]
@@ -38,12 +39,14 @@ class Emailer < ActionMailer::Base
   end
 
   def send_error_email(params)
+    mail params
     Analytics.email_error
     @message = params[:message]
     #TODO, log different types of errors and send us a text message!
   end
 
   def send_not_registered_email(params={})
+    mail params
     Analytics.send_not_registered
     @registration_url = ENV['base_url']
     #TODO

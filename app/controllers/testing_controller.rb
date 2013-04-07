@@ -1,5 +1,16 @@
 class TestingController < ApplicationController
 
+  def send_email
+    response = Emailer.send_image_encoded_email({
+      from: "naruto137@gmail.com",
+      to: %w{wellecks@gmail.com naruto137@gmail.com},
+      subject: "The Subject #{Time.now.to_i}",
+      body: "THIS IS THE BODY"
+    }).deliver
+
+    render :text => response
+  end
+
   def work
     params = Marshal.load($redis.get("sample_email"))
 
@@ -9,6 +20,7 @@ class TestingController < ApplicationController
     params[:from] = params[:from][/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/]
     params[:text] = params[:text].force_encoding("ISO-8859-1").encode("UTF-8")
     params[:html] = params[:html].force_encoding("ISO-8859-1").encode("UTF-8")
+    params[:subject] = params[:subject] + " #{Time.now.to_i}"
 
     unless params[:from][/@gmail.com/]
       Emailer.send_error_email(message: "Unfortunately, our service only works with GMail right now!").deliver
@@ -34,15 +46,19 @@ class TestingController < ApplicationController
       return
     end
 
-    if email.send_image_encoded_email == false
-      Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
-      return
-    end
+    email.send_image_encoded_email.deliver
+    # if ActionMailer::Base.deliveries.empty?
+    #   raise ("Unable to email.send_image_encoded_email.deliver")
+    #   # Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
+    #   # return
+    # end
 
-    if email.send_confirmation == false
-      Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
-      return
-    end    
+    email.send_confirmation.deliver
+    # if ActionMailer::Base.deliveries.empty?
+    #   raise ("Unable to email.send_confirmation.deliver")
+    #   # Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
+    #   # return
+    # end    
 
     Analytics.email_worker_completed
     render json: "true".to_json

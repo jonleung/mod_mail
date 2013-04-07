@@ -91,7 +91,7 @@ class Email
       to: self.to,
       subject: self.subject,
       original_text_body: self.original_text_body,
-      email_id: self.id,
+      email_id: self.id.to_s,
       security_key: security_key
     })
   end
