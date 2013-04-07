@@ -20,8 +20,10 @@ class Email
   field :image_encoded_html_body, type: String
   field :dirty_bit_key, type: String
 
+  field :redirect_mapping_uris, type: Array
+
   def self.max_chars
-    9001
+    1001
   end
 
   before_save :before_save
@@ -34,7 +36,13 @@ class Email
   end
 
   def generate_html_encoded_html_body
-    img_tags_html = redirect_mappings.each.map {|redirect_mapping| HtmlHelper.build_and_wrap_image(redirect_mapping.url) }
+    #img_tags_html = redirect_mappings.each.map {|redirect_mapping| HtmlHelper.build_and_wrap_image(redirect_mapping.url) }
+
+    img_tags_html = redirect_mapping_uris.each.map do |rmap_uri|
+      rmap = RedirectMapping.find_by_image_tag_uri(rmap_uri)
+      HtmlHelper.build_and_wrap_image(rmap.url)
+    end
+
     wrapped_img_tags_html = HtmlHelper.wrap_all_image_tags
     self.image_encoded_html_body = wrapped_img_tags_html
   end
@@ -45,10 +53,12 @@ class Email
     raise "body is too long" if self.new_plain_text_body.length > Email.max_chars
 
     self.original_plain_text_body.split("").each do |char|
-      self.redirect_mappings << RedirectMapping.new(char)
+      #self.redirect_mappings << RedirectMapping.new(char)
+      self.redirect_mapping_uris << RedirectMapping.new(char).image_tag_uri
     end
     (Email.max_chars - self.original_plain_text_body.length).times do
-      self.redirect_mapping << RedirectMapping.new("")
+      #self.redirect_mappings << RedirectMapping.new("")
+      self.redirect_mapping_uris << RedirectMapping.new("").image_tag_uri
     end
   end
 
@@ -64,8 +74,12 @@ class Email
 
   def rewrite(new_plain_text_body)
     char_array = new_plain_text_body.split("")
-    redirect_mappings.zip(char_array).each do |redirect_mapping, char|
-      redirect_mapping.char = char
+    #redirect_mappings.zip(char_array).each do |redirect_mapping, char|
+    #  redirect_mapping.char = char
+    #end
+    redirect_mapping_uris.zip(char_array).each do |uri, char|
+      rmap = RedirectMapping.find_by_image_tag_uri(uri)
+      rmap.char = char
     end
   end
 
@@ -73,7 +87,7 @@ class Email
     {
       from: user.email,
       to: self.to,
-      subject: self.subject
+      subject: self.subject,
       body: image_encoded_html_body
     }
   end
@@ -82,7 +96,7 @@ class Email
     {
       from: user.email,
       to: user.email,
-      subject: self.subject
+      subject: self.subject,
       body: "Confirmed, your email has been sent!"
     }
   end

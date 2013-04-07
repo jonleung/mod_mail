@@ -26,8 +26,7 @@ class GmailController < ApplicationController
       :credential_params => credential_params,
     }
     user = User.from_omniauth(omniauth_params)
-
-    render :text => "Alrighty #{user_params[:first_name]}, you're all setup!"
+    render 'welcome.html.erb'
   end
 
   def omniauth_failure_callback
