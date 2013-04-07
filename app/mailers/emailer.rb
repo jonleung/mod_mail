@@ -24,18 +24,21 @@ class Emailer < ActionMailer::Base
 
   def send_confirmation_email(params)
     Analytics.send_confirmation
-    #TODO
+    @emails = params[:to_emails_array].join(", ")
+    @original_text_body = params[:text_body]
+    @update_form_url = "/email/#{params[:email_id]}/update?security_token=#{params[:security_token]}"
+    # TODO
   end
 
   def send_error_email(params)
     Analytics.email_error
+    @message = params[:message]
     #TODO, log different types of errors and send us a text message!
-
-    #TODO
   end
 
   def send_not_registered_email(params)
     Analytics.send_not_registered
+    @registration_url = "/"
     #TODO
   end
 

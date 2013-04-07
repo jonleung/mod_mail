@@ -20,4 +20,6 @@ ModMail::Application.routes.draw do
 
   # Callbacks
   match "/sendgrid/callback" => "sendgrid#callback"
+
+  # TODO -- Route for the landing page
 end

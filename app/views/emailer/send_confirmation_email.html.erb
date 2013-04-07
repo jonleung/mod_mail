@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  </head>
+  <body>
+    <h1 style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color:#222"> ModMail </h1>
+    <img src="http://s3.blah.com/unique_url_for_green_or_red_rectangle.png">
+
+    <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:13pt; color:#222">
+      <p> We've sent your email to <strong><%= @emails %></strong>. You can edit the message below. </p>
+      <form action=<%= @update_form_url %> method="POST" target="_blank">
+        <textarea cols="50" rows="10" name="edited_message">
+          <%= @original_text_body %>
+        </textarea>
+        <br>
+        <input type="submit" value="Submit changes">
+      </form>
+    </div>
+  </body>
+</html>
