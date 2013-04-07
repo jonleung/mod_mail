@@ -91,6 +91,7 @@ class Email
     i = 0
     char_array = new_plain_text_body.split("")
     redirect_mapping_uris.zip(char_array) do |uri, char|
+      char = "" if char.nil?
       rmap = RedirectMapping.find_by_image_tag_uri(uri)
       rmap.char = char
 

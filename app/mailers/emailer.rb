@@ -47,8 +47,6 @@ class Emailer < ActionMailer::Base
       @emails = params[:mod_mail_rec]
     end
 
-    debugger
-
     @original_text_body = params[:original_text_body]
     @dirty_bit_url = "#{ENV['base_url']}/email/#{params[:email_id]}/is_read_image"
     @update_form_url = "#{ENV['base_url']}/email/#{params[:email_id]}/rewrite?security_key=#{params[:security_key]}"
