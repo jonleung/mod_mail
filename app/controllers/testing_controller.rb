@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class TestingController < ApplicationController
 
   def send_email
@@ -12,9 +14,10 @@ class TestingController < ApplicationController
   end
 
   def work
+
     params = Marshal.load($redis.get("sample_email"))
 
-    params[:text] = "naruto137@gmail.com\nwellecks@gmail.com\n\nHello World!"
+    params[:text] = "naruto137@gmail.com\nwellecks@gmail.com\n\nWafer liquorice halvah pastry topping liquorice soufflé. Lollipop gummies jujubes dragée."
     params[:html] = "<h1>Hello World!</h1>"
 
     params[:from] = params[:from][/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/]
@@ -33,15 +36,21 @@ class TestingController < ApplicationController
       return
 
     elsif params[:text].length > Email.max_chars
-      Emailer.send_error_email(message: "Unfortunately your email is too long! Please try sending the email again with a shorter message!").deliver
+      Emailer.send_error_email({
+        from: params[:from],
+        to: params[:from],
+        subject: params[:subject],
+        message: "Unfortunately your email is too long! Please try sending the email again with a shorter message!"
+      }).deliver
+      return
     end
 
     email_params = convert_email_params(params)
     email = user.emails.new(email_params)
 
     if email.save
-      render text: email.image_encoded_html_body
-      return
+      # render text: email.image_encoded_html_body
+      # return
     else
       Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
       return
@@ -72,14 +81,11 @@ class TestingController < ApplicationController
     email_params[:original_text_body] = body_hash[:body]
     to_recipients = body_hash[:to]
 
-
-
     email_params[:from] = params[:from]
     email_params[:to] = to_recipients
     email_params[:reply_to] = params[:from]
     email_params[:subject] = params[:subject]
     email_params[:original_html_body] = params[:html]
-
 
     return email_params
   end

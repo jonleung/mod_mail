@@ -22,7 +22,6 @@ class Emailer < ActionMailer::Base
   end
 
   def send_image_encoded_email(params)
-    debugger
     mail params.slice(:from, :to, :subject, :body) do |format|
       # format.html { render :text => params[:image_encoded_html_body] }
       # format.text { render :text => "                 " }

@@ -22,7 +22,7 @@ class Email
 
 
   def self.max_chars
-    100
+    200
   end
 
   before_save :before_save_callback
