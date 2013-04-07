@@ -33,11 +33,7 @@ class EmailWorker
     if email.deliver_confirmation == false
       Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.")
       return
-    end
-
-    
-
-    
+    end    
 
     user.google_credential.refresh #todo, smartly do this
     user.token

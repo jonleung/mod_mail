@@ -4,6 +4,7 @@ ModMail::Application.routes.draw do
   get '/email/:email_id/is_read_image' => 'email#is_read_image'
   post '/email/:email_id/rewrite' => 'email#update'
   get '/p/:image_tag_uri' => 'image_tag#get'
+  get '/dbit/:key' => 'dirty_bit#get'
 
   # Debugging
   match '/p' => 'image_playground#playground'

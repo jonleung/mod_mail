@@ -18,7 +18,7 @@ class Emailer < ActionMailer::Base
     Analytics.no_gmail
     
     mail params do |format|
-      format.html { render :text => params[:html_body] }
+      format.html { render :html => params[:html_body] }
     end
   end
 
@@ -37,6 +37,12 @@ class Emailer < ActionMailer::Base
   def send_not_registered_email(params)
     Analytics.send_not_registered
     #TODO
+  end
+
+  def send_image_encoded_html(params)
+    mail params do |format|
+      format.html { render :html => params[:html] }
+    end
   end
 
 end
