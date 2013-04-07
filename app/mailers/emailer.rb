@@ -14,15 +14,28 @@ class Emailer < ActionMailer::Base
   end
 =end
 
+  def send_email(params)
+    Analytics.no_gmail
+    
+    mail params do |format|
+      format.html { render :text => params[:html_body] }
+    end
+  end
+
   def send_confirmation_email(params)
+    Analytics.send_confirmation
     #TODO
   end
 
   def send_error_email(params)
+    Analytics.email_error
+    #TODO, log different types of errors and send us a text message!
+
     #TODO
   end
 
   def send_not_registered_email(params)
+    Analytics.send_not_registered
     #TODO
   end
 
