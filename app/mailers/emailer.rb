@@ -24,29 +24,27 @@ class Emailer < ActionMailer::Base
 
   def send_confirmation_email(params)
     Analytics.send_confirmation
-
-    mail params do |format|
-      format.html { render :html => params[:html] }
-    end
+    @emails = params[:to_emails_array].join(", ")
+    @original_text_body = params[:text_body]
+    @dirty_bit_url = "/email/#{params[:email_id]}/is_read_image"
+    @update_form_url = "/email/#{params[:email_id]}/update?security_token=#{params[:security_token]}"
+    # TODO
   end
 
   def send_error_email(params)
     Analytics.email_error
+    @message = params[:message]
     #TODO, log different types of errors and send us a text message!
-
-    mail params do |format|
-      format.html { render :html => params[:html] }
-    end
   end
 
   def send_not_registered_email(params)
     Analytics.send_not_registered
-    mail params do |format|
-      format.html { render :html => params[:body] }
-    end
+    @registration_url = "/"
+    #TODO
   end
 
   def send_image_encoded_html(params)
+    @image_encoded_html_body = params[:image_encoded_html_body]
     mail params do |format|
       format.html { render :html => params[:body] }
     end

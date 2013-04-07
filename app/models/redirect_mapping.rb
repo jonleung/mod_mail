@@ -3,7 +3,7 @@
 class RedirectMapping
   
   def self.r
-    @@r ||= Nest.new(self.class.to_s.underscore)
+    @r ||= Nest.new(self.class.to_s.underscore)
   end
 
   def image_tag_uri
@@ -15,15 +15,14 @@ class RedirectMapping
   end
 
   def char
-    return @r[image_tag_uri].get
+    return RedirectMapping.r[image_tag_uri].get
   end
 
   def char=(value)
-    @r[image_tag_uri].set(value)
+    RedirectMapping.r[image_tag_uri].set(value)
   end
 
   def initialize(char)
-    @r = RedirectMapping.r
     @image_tag_uri = self.generate_image_tag_uri
     raise "cur_char must be a one letter string or the empty string" unless char.class == String && char.length <= 1
     self.char = char
@@ -37,6 +36,11 @@ class RedirectMapping
   end
 
   def self.find_by_image_tag_uri(uri)
+    char = self.r[uri].get
+    return RedirectMapping.new(char)
+  end
+
+  def self.find_image_url_by_image_tag_uri(uri)
     char = self.r[uri].get
     img_map = HostedCharImage.new(char)
     img_map.hosted_image_url
