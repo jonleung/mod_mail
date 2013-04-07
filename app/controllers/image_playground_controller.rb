@@ -37,7 +37,7 @@ class ImagePlaygroundController < ApplicationController
         char = "_"
         image = MagickTitle.say(char, color: '#ffffff')
 
-        bucket = 'ImageChars'
+        bucket = 'charmander'
         filename = image.filename
 
         if image_url = $redis.get("image:#{filename}")
@@ -66,7 +66,7 @@ class ImagePlaygroundController < ApplicationController
           image = MagickTitle.say(char, color: "#000000", bottom_padding: 3)
         end
 
-        bucket = 'ImageChars'
+        bucket = 'charmander'
         filename = image.filename
 
         if image_url = $redis.get("image:#{filename}")

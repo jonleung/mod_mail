@@ -1,6 +1,6 @@
 image = MagickTitle.say("jonathanrocks")
 
-bucket = 'ImageChars'
+bucket = 'charmander'
 filename = image.filename
 
 object = AWS::S3::S3Object.store(filename, open(image.full_path), 'ImageChars', {content_type: 'image/png', :access => :public_read} )
