@@ -12,6 +12,7 @@ class HostedCharImage
 	end
 
 	def hosted_image_url
+		return @r[@char].get if @r[char].get.present?
 		@hosted_image_url
 	end
 
@@ -21,7 +22,7 @@ class HostedCharImage
 	end
 
 	def generate_hosted_image_url(char)
-		file = TTFunk::File.open("/Volumes/h/Dropbox/dev/rails/mod_mail/fonts/arial.ttf")
+		file = TTFunk::File.open("./fonts/arial.ttf")
 		twelve_px_spacer_url = "http://i.imgur.com/Ffh4ZC6.png"
 		bucket = "charmander"
 
@@ -32,7 +33,7 @@ class HostedCharImage
 	  		self.hosted_image_url = twelve_px_spacer_url
 	  	when " "
 	  		image = MagickTitle.say("_", color: '#ffffff')
-	  		add_img_to_s3(image, bucket) unless @r["blank"].present?
+	  		add_img_to_s3(image, bucket) unless @r["blank"].get.present?
 	  	else
 	  		if char.in?(%w{p g y q j})
 	  			image = MagickTitle.say(char, color: "#000000")
@@ -40,8 +41,9 @@ class HostedCharImage
 	  			descent_height = (file.descent/1000.0*MagickTitle.options[:font_size]).abs
 	  			image = MagickTitle.say(char, color: "#000000", bottom_padding: descent_height)
 	  		end
-	  		add_img_to_s3(image, bucket) unless @r[char].present?
+	  		add_img_to_s3(image, bucket) unless @r[char].get.present?
   		end
+  		self.hosted_image_url
   	end
 
   	def add_img_to_s3(image, bucket)
