@@ -17,16 +17,17 @@ class Emailer < ActionMailer::Base
 
   def send_email(params)
     mail params do |format|
-      format.html { render :html => params[:body] }
+      format.html { render :text => params[:body] }
     end
   end
 
   def send_image_encoded_email(params)
-    mail params do |format|
+    debugger
+    mail params.slice(:from, :to, :subject, :body) do |format|
+      # format.html { render :text => params[:image_encoded_html_body] }
+      # format.text { render :text => "                 " }
       format.html { render :text => params[:image_encoded_html_body] }
-      format.text { render :text => "                 " }
     end
-    return
   end
 
   def send_confirmation_email(params)

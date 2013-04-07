@@ -1,8 +1,7 @@
 class RedirectMappingController < ApplicationController
 
   def get
-    redirect_mapping = RedirectMapping.find_by_image_tag_uri()
-    redirect_to redirect_mapping.url
+    redirect_to RedirectMapping.find_image_url_by_image_tag_uri(params[:image_tag_uri])
   end
 
 end

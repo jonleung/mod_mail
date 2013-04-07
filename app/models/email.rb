@@ -53,13 +53,15 @@ class Email
   end
 
   def generate_html_encoded_html_body
+    self.image_encoded_html_body = ""
+
     img_tags_html = redirect_mapping_uris.each.map do |rmap_uri|
       rmap = RedirectMapping.find_by_image_tag_uri(rmap_uri)
-      HtmlHelper.build_and_wrap_image(rmap.url)
+      img_tag = HtmlHelper.build_and_wrap_image(rmap.url)
+      self.image_encoded_html_body << img_tag
     end
-
-    wrapped_img_tags_html = HtmlHelper.wrap_all_image_tags(img_tags_html)
-    self.image_encoded_html_body = wrapped_img_tags_html
+    
+    self.image_encoded_html_body = HtmlHelper.wrap_all_image_tags(self.image_encoded_html_body)
   end
 
   def is_read?
@@ -81,6 +83,7 @@ class Email
       from: user.email,
       to: user.email,
       subject: self.subject,
+      body: self.image_encoded_html_body,
       image_encoded_html_body: self.image_encoded_html_body
     })
   end

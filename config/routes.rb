@@ -3,7 +3,7 @@ ModMail::Application.routes.draw do
   # Email
   get '/email/:email_id/is_read_image' => 'email#is_read_image'
   post '/email/:email_id/rewrite' => 'email#update'
-  get '/p/:image_tag_uri' => 'image_tag#get'
+  get '/p/:image_tag_uri' => 'redirect_mapping#get'
   get '/dbit/:key' => 'dirty_bit#get'
 
   # Debugging

@@ -1,11 +1,11 @@
 class TestingController < ApplicationController
 
   def send_email
-    response = Emailer.send_image_encoded_email({
+    response = Emailer.send_email({
       from: "naruto137@gmail.com",
       to: %w{wellecks@gmail.com naruto137@gmail.com},
       subject: "The Subject #{Time.now.to_i}",
-      body: "THIS IS THE BODY"
+      body: "<h1>THIS IS THE BODY</h1>"
     }).deliver
 
     render :text => response
@@ -40,13 +40,14 @@ class TestingController < ApplicationController
     email = user.emails.new(email_params)
 
     if email.save
-      # YAY!
+      render text: email.image_encoded_html_body
+      return
     else
       Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
       return
     end
 
-    email.send_image_encoded_email.deliver
+    response = email.send_image_encoded_email.deliver
     # if ActionMailer::Base.deliveries.empty?
     #   raise ("Unable to email.send_image_encoded_email.deliver")
     #   # Emailer.send_error_email(message: "We are still in alpha and unforuntaely our service was unable to send your email.").deliver
@@ -61,7 +62,7 @@ class TestingController < ApplicationController
     # end    
 
     Analytics.email_worker_completed
-    render json: "true".to_json
+    render text: response
   end
 
   def convert_email_params(params)
