@@ -1,8 +1,12 @@
 class HostedCharImage
 
+	def self.r
+		@@r ||= Nest.new(self.class.to_s.underscore)
+	end
+
 	def initialize(char)
-		raise "Invalid char #{char} for HostedCharImage." unless char.class == String &&  (char.length == 1 || char == "nil")
-		@r = Nest.new(self.class.to_s.underscore)
+		raise "Invalid char #{char} for HostedCharImage." unless char.class == String && char.length <= 1
+		@r = HostedCharImage.r
 		@char = char
 		@hosted_image_url = generate_hosted_image_url(char)
 	end
@@ -27,7 +31,7 @@ class HostedCharImage
 		bucket = "charmander"
 
 		case char
-		when "nil"
+		when ""
   		# get the blank image and do something
 	  	when "\n"
 	  		self.hosted_image_url = twelve_px_spacer_url
