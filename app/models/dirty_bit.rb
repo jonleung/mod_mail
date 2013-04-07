@@ -17,10 +17,12 @@ class DirtyBit
 	end
 
 	def self.make_dirty(key)
+		raise "DirtyBit key #{key} not found." unless self.r[key].get.present?
 		self.r[key].set("true")
 	end
 
 	def self.find_by_key(key)
+		raise "DirtyBit key #{key} not found." unless self.r[key].get.present?
 		status = self.r[key].get
 		return true if status == "true"
 		return false
